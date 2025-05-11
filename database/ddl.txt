@@ -1,0 +1,82 @@
+-- Create the User table
+CREATE TABLE [User] (
+    userId INT PRIMARY KEY,
+    name VARCHAR(255),
+    email VARCHAR(255),
+    password VARCHAR(255),
+    userThemePreference VARCHAR(255),
+    userFontPreference VARCHAR(255),
+    createdAt DATETIME DEFAULT NOW(),
+    updatedAt DATETIME DEFAULT GETDATE()
+);
+
+-- Create the Note table
+CREATE TABLE Note (
+    noteId INT PRIMARY KEY,
+    userId INT FOREIGN KEY REFERENCES [User](userId),
+    title VARCHAR(255),
+    content TEXT,
+    imageUrl VARCHAR(255),
+    priority VARCHAR(50),
+    isArchived BIT,
+    archivedDateTime DATETIME,
+    createdAt DATETIME DEFAULT NOW(),
+    updatedAt DATETIME DEFAULT GETDATE()
+);
+
+-- Create the Tag table
+CREATE TABLE Tag (
+    tagId INT PRIMARY KEY,
+    name VARCHAR(255),
+    createdAt DATETIME DEFAULT NOW(),
+    updatedAt DATETIME DEFAULT GETDATE()
+);
+
+-- Create the NoteTag junction table for the many-to-many relationship
+CREATE TABLE NoteTag (
+    noteId INT FOREIGN KEY REFERENCES Note(noteId),
+    tagId INT FOREIGN KEY REFERENCES Tag(tagId),
+    CONSTRAINT PK_NoteTag PRIMARY KEY (noteId, tagId)
+);
+
+
+-- Triggers
+
+-- Trigger for [User] table
+CREATE TRIGGER trg_UpdateUser
+ON [User]
+AFTER UPDATE
+AS
+BEGIN
+    UPDATE [User]
+    SET updatedAt = GETDATE()
+    FROM inserted
+    WHERE [User].userId = inserted.userId;
+END;
+GO
+
+-- Trigger for Note table
+CREATE TRIGGER trg_UpdateNote
+ON Note
+AFTER UPDATE
+AS
+BEGIN
+    UPDATE Note
+    SET updatedAt = GETDATE()
+    FROM inserted
+    WHERE Note.noteId = inserted.noteId;
+END;
+GO
+
+-- Trigger for Tag table
+CREATE TRIGGER trg_UpdateTag
+ON Tag
+AFTER UPDATE
+AS
+BEGIN
+    UPDATE Tag
+    SET updatedAt = GETDATE()
+    FROM inserted
+    WHERE Tag.tagId = inserted.tagId;
+END;
+GO
