@@ -6,7 +6,6 @@ namespace SENAI_Notes.Models;
 public partial class NotesUser
 {
     public int IdUser { get; set; }
-
     public string? Name { get; set; }
 
     public string Email { get; set; }

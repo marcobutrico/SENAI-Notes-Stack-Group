@@ -4,9 +4,12 @@ namespace SENAI_Notes.Interfaces
 {
     public interface INoteUserRepository
     {
-        Task<NotesUser> GetByIdAsync(int id);
-        Task<NotesUser> GetByEmailAsync(string email);
-        Task AddAsync(NotesUser usuario);
-
+        Task<List<NotesUser>> GetAllUsers();
+        Task<NotesUser> GetByIdAsync(int idUser);
+        Task CreateUserAsync(NotesUser usuario);
+        //Task UpdateUserAsync(NotesUser usuario, int idUser);
+        //Task DeleteUserAsync(int idUser);
+        //Task<NotesUser> GetByEmailnPasswordAsync(string Email, string Password);
+        //Task GetByName(string Nome);
     }
 }

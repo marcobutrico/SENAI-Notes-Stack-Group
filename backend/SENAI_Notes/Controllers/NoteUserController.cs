@@ -1,11 +1,62 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SENAI_Notes.Interfaces;
+using SENAI_Notes.Models;
 
 namespace SENAI_Notes.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
-    public class NoteUserController : ControllerBase
+    [Route("api/[controller]")]
+    public class NotesUserController : ControllerBase
     {
+        private readonly INoteUserRepository _userRepository;
+
+        public NotesUserController(INoteUserRepository userRepository)
+        {
+            _userRepository = userRepository;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            var users = await _userRepository.GetAllUsers();
+            return Ok(users);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUserById(int id)
+        {
+            var user = await _userRepository.GetByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return Ok(user);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateUser(NotesUser user)
+        {
+            if (user == null)
+            {
+                return BadRequest("Object Users cannot be null.");
+            }
+
+            await _userRepository.CreateUserAsync(user); 
+            return CreatedAtAction(nameof(GetUserById), new { id = user.IdUser }, user);
+        }
+
+        //[HttpGet("email/{email}/")]
+        //public async Task<IActionResult> GetUserByEmail(string email)
+        //{
+        //    var user = await _userRepository.GetByEmailAsync(email);
+        //    if (user == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return Ok(user);
+        //}
+
+
     }
 }
