@@ -5,52 +5,84 @@ using SENAI_Notes.Models;
 
 namespace SENAI_Notes.Controllers
 {
-    //[Route("api/[controller]")]
-    //[ApiController]
-    //public class NoteTagController : ControllerBase
-    //{
-    //    private readonly INoteTagRepository _noteTagRepository;
+    [Route("api/[controller]")]
+    [ApiController]
+    public class TagController : ControllerBase
+    {
+        private readonly ITagRepository _tagRepository;
 
-    //    public NoteTagController(INoteTagRepository noteTagRepository)
-    //    {
-    //        _noteTagRepository = noteTagRepository;
-    //    }
+        public TagController(ITagRepository tagRepository)
+        {
+            _tagRepository = tagRepository;
+        }
 
-    //    // Get all NoteTags
-    //    [HttpGet]
-    //    public async Task<ActionResult<IEnumerable<NoteTag>>> GetNoteTags()
-    //    {
-    //        var noteTags = await _noteTagRepository.GetAllNoteTagsAsync();
-    //        return Ok(noteTags);
-    //    }
+        // GET: api/Tag
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Tag>>> GetTags()
+        {
+            var tags = await _tagRepository.GetAllAsync();
+            return Ok(tags);
+        }
 
-    //    // Get NoteTag by ID
-    //    [HttpGet("{id}")]
-    //    public async Task<ActionResult<NoteTag>> GetNoteTag(int id)
-    //    {
-    //        var noteTag = await _noteTagRepository.GetNoteTagByIdAsync(id);
-    //        if (noteTag == null)
-    //        {
-    //            return NotFound();
-    //        }
-    //        return Ok(noteTag);
-    //    }
+        // GET: api/Tag/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Tag>> GetTag(int id)
+        {
+            var tag = await _tagRepository.GetByIdAsync(id);
 
-    //    // Create a new NoteTag
-    //    [HttpPost]
-    //    public async Task<ActionResult<NoteTag>> CreateNoteTag(NoteTag noteTag)
-    //    {
-    //        await _noteTagRepository.AddNoteTagAsync(noteTag);
-    //        return CreatedAtAction(nameof(GetNoteTag), new { id = noteTag.IdNoteTag }, noteTag);
-    //    }
+            if (tag == null)
+            {
+                return NotFound();
+            }
 
-    //    // Delete a NoteTag by ID
-    //    [HttpDelete("{id}")]
-    //    public async Task<ActionResult> DeleteNoteTag(int id)
-    //    {
-    //        await _noteTagRepository.RemoveNoteTagAsync(id);
-    //        return NoContent();
-    //    }
-    //}
+            return Ok(tag);
+        }
 
+        // POST: api/Tag
+        [HttpPost]
+        public async Task<ActionResult<Tag>> CreateTag(Tag tag)
+        {
+            await _tagRepository.AddAsync(tag);
+            return CreatedAtAction(nameof(GetTag), new { id = tag.IdTag }, tag);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateTag(int id, Tag tag)
+        {
+            if (id != tag.IdTag)
+            {
+                return BadRequest();
+            }
+
+            var existingTag = await _tagRepository.GetByIdAsync(id);
+            if (existingTag == null)
+            {
+                return NotFound();
+            }
+
+            await _tagRepository.UpdateAsync(tag);
+            return NoContent();
+        }
+
+
+
+
+
+
+        // DELETE: api/Tag/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTag(int id)
+        {
+            var tag = await _tagRepository.GetByIdAsync(id);
+            if (tag == null)
+            {
+                return NotFound();
+            }
+
+            await _tagRepository.DeleteAsync(id);
+            return NoContent();
+        }
+
+    }
 }
+  

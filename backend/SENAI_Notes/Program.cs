@@ -11,12 +11,30 @@ builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<SenaiNotesContext>();
-// builder.Services.AddScoped<INoteRepository, NoteRepository>();
-//builder.Services.AddScoped<INoteTagRepository, NoteTagRepository>();
-//builder.Services.AddScoped<INoteUserRepository, NoteUserRepository>();
-//builder.Services.AddScoped<ITagRepository, TagRepository>();
+builder.Services.AddScoped<INoteRepository, NoteRepository>();
+builder.Services.AddScoped<INoteTagRepository, NoteTagRepository>();
+builder.Services.AddScoped<INoteUserRepository, NoteUserRepository>();
+builder.Services.AddScoped<ITagRepository, TagRepository>();
+
+
+builder.Services.AddCors(
+    options =>
+    {
+        options.AddPolicy(
+            name: "minhasOrigens",
+            policy =>
+            {
+                policy.WithOrigins("");
+                policy.AllowAnyHeader();
+                policy.AllowAnyMethod();
+            }
+           );
+    
+    });
 
 var app = builder.Build();
+
+app.UseCors("minhasOrigens");
 
 // Avisa o .NET que eu tenho Controladores
 app.MapControllers();

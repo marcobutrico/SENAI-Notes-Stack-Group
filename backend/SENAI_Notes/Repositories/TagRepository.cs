@@ -1,23 +1,43 @@
-﻿using SENAI_Notes.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using SENAI_Notes.Context;
+using SENAI_Notes.Interfaces;
 using SENAI_Notes.Models;
 
 namespace SENAI_Notes.Repositories
 {
     public class TagRepository : ITagRepository
     {
-        public Task AddAsync(Tag tag)
+        private SenaiNotesContext _context;
+
+
+        public TagRepository(SenaiNotesContext context) => _context = context;
+
+        public async Task<List<Tag>> GetAllAsync() => await _context.Tags.ToListAsync();
+
+        public async Task<Tag> GetByIdAsync(int id) => await _context.Tags.FindAsync(id);
+
+        public async Task AddAsync(Tag tag)
         {
-            throw new NotImplementedException();
+            object value = _context.Tags.Add(tag);
+            await _context.SaveChangesAsync();
         }
 
-        public Task<List<Tag>> GetAllAsync()
+
+        public async Task UpdateAsync(Tag tag)
         {
-            throw new NotImplementedException();
+            _context.Tags.Update(tag);
+            await _context.SaveChangesAsync();
         }
 
-        public Task<Tag> GetByIdAsync(int id)
+        public async Task DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            var tag = await _context.Tags.FindAsync(id);
+            if (tag != null)
+            {
+                _context.Tags.Remove(tag);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }
+

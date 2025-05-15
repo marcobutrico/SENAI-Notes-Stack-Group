@@ -80,6 +80,7 @@ public partial class SenaiNotesContext : DbContext
             entity.ToTable("TAG");
 
             entity.Property(e => e.Name).IsUnicode(false);
+
         });
 
         OnModelCreatingPartial(modelBuilder);
