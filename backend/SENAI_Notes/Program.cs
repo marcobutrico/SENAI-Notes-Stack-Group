@@ -11,10 +11,10 @@ builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<SenaiNotesContext>();
-// builder.Services.AddScoped<INoteRepository, NoteRepository>();
-//builder.Services.AddScoped<INoteTagRepository, NoteTagRepository>();
-//builder.Services.AddScoped<INoteUserRepository, NoteUserRepository>();
-//builder.Services.AddScoped<ITagRepository, TagRepository>();
+builder.Services.AddScoped<INoteRepository, NoteRepository>();
+builder.Services.AddScoped<INoteTagRepository, NoteTagRepository>();
+builder.Services.AddScoped<INoteUserRepository, NoteUserRepository>();
+builder.Services.AddScoped<ITagRepository, TagRepository>();
 
 var app = builder.Build();
 
