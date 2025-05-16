@@ -1,33 +1,53 @@
-﻿using SENAI_Notes.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using SENAI_Notes.Context;
+using SENAI_Notes.Interfaces;
 using SENAI_Notes.Models;
 
 namespace SENAI_Notes.Repositories
 {
     public class NoteRepository : INoteRepository
     {
-        public Task AddAsync(Note note)
+        private readonly SenaiNotesContext _context;
+
+        public NoteRepository(SenaiNotesContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public Task DeleteAsync(int id)
+        public async Task<List<Note>> GetAllAsync(int IdUser)
         {
-            throw new NotImplementedException();
+            return await _context.Notes.Where(n => n.IdUser == IdUser).ToListAsync();
         }
 
-        public Task<List<Note>> GetAllAsync(int IdUser)
+        public async Task<Note> GetByIdAsync(int idNote)
         {
-            throw new NotImplementedException();
+            return await _context.Notes.FindAsync(idNote);
         }
 
-        public Task<Note> GetByIdAsync(int idNote)
+        public async Task AddAsync(Note note)
         {
-            throw new NotImplementedException();
+            _context.Notes.Add(note);
+            await _context.SaveChangesAsync();
         }
 
-        public Task UpdateAsync(Note note)
+        public async Task UpdateAsync(Note note)
         {
-            throw new NotImplementedException();
+            _context.Notes.Update(note);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var note = await _context.Notes.FindAsync(id);
+            if (note != null)
+            {
+                _context.Notes.Remove(note);
+                await _context.SaveChangesAsync();
+            }
+            await _context.SaveChangesAsync();
         }
     }
 }
+
+
+       

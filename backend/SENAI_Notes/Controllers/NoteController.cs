@@ -11,36 +11,51 @@ namespace SENAI_Notes.Controllers
     {
         private readonly INoteRepository _notaRepo;
 
-        public NoteController(INoteRepository notaRepo) => _notaRepo = notaRepo;
+            public NoteController(INoteRepository notaRepo)
+            {
+                _notaRepo = notaRepo;
+            }
 
-        [HttpGet("{idNote}")]
-        public async Task<IActionResult> GetNotas(int idNote) =>
-            Ok(await _notaRepo.GetAllAsync(idNote));
+            [HttpGet("{idUser}")] 
+            public async Task<IActionResult> GetNotas(int idUser) 
+            {
+                var notas = await _notaRepo.GetAllAsync(idUser);
+                return Ok(notas);
+            }
 
-        [HttpGet("nota/{id}")]
-        public async Task<IActionResult> GetNota(int id) =>
-            Ok(await _notaRepo.GetByIdAsync(id));
+            [HttpGet("nota/{id}")]
+            public async Task<IActionResult> GetNota(int id)
+            {
+                var nota = await _notaRepo.GetByIdAsync(id);
+                if (nota == null)
+                {
+                    return NotFound();
+                }
+                return Ok(nota);
+            }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateNota([FromBody] Note nota)
-        {
-            await _notaRepo.AddAsync(nota);
-            return Ok(nota);
+            [HttpPost]
+            public async Task<IActionResult> CreateNota([FromBody] Note nota)
+            {
+                await _notaRepo.AddAsync(nota);
+                return CreatedAtAction(nameof(GetNota), new { id = nota.IdNote }, nota); 
+            }
+
+            [HttpPut]
+            public async Task<IActionResult> UpdateNota([FromBody] Note nota)
+            {
+                await _notaRepo.UpdateAsync(nota);
+                return NoContent();
+            }
+
+            [HttpDelete("{id}")]
+            public async Task<IActionResult> DeleteNota(int id)
+            {
+                await _notaRepo.DeleteAsync(id);
+                return NoContent(); 
+            }
+
         }
-
-        [HttpPut]
-        public async Task<IActionResult> UpdateNota([FromBody] Note nota)
-        {
-            await _notaRepo.UpdateAsync(nota);
-            return Ok(nota);
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteNota(int id)
-        {
-            await _notaRepo.DeleteAsync(id);
-            return Ok();
-        }
-    }
 }
 
+      

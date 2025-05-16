@@ -64,11 +64,6 @@ namespace SENAI_Notes.Controllers
             return NoContent();
         }
 
-
-
-
-
-
         // DELETE: api/Tag/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTag(int id)
