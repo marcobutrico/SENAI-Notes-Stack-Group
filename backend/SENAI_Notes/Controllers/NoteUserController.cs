@@ -42,20 +42,45 @@ namespace SENAI_Notes.Controllers
                 return BadRequest("Object Users cannot be null.");
             }
 
-            await _userRepository.CreateUserAsync(user); 
+            await _userRepository.CreateUserAsync(user);
             return CreatedAtAction(nameof(GetUserById), new { id = user.IdUser }, user);
         }
 
-        //[HttpGet("email/{email}/")]
-        //public async Task<IActionResult> GetUserByEmail(string email)
-        //{
-        //    var user = await _userRepository.GetByEmailAsync(email);
-        //    if (user == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return Ok(user);
-        //}
+        // Deleta Produto por ID
+        [HttpDelete("{idUser}")]
+        public async Task<IActionResult> Deletar(int idUser)
+        {
+            try
+            {
+                await _userRepository.DeleteUserAsync(idUser);
+
+                return NoContent();
+            }
+            // Caso dê erro
+            catch (Exception ex)
+            {
+
+                return NotFound("Usuario não encontrado!");
+            }
+        }
+
+        // Edita Produto por ID
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Editar(int id, NotesUser user)
+        {
+            try
+            {
+                await _userRepository.UpdateUserAsync(id, user);
+                return Ok(user);
+
+            }
+            // Caso dê erro
+            catch (Exception ex)
+            {
+
+                return NotFound(ex);
+            }
+        }
 
 
     }

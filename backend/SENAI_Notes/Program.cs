@@ -15,7 +15,7 @@ builder.Services.AddScoped<INoteRepository, NoteRepository>();
 builder.Services.AddScoped<INoteTagRepository, NoteTagRepository>();
 builder.Services.AddScoped<INoteUserRepository, NoteUserRepository>();
 builder.Services.AddScoped<ITagRepository, TagRepository>();
-<<<<<<< HEAD
+
 
 
 builder.Services.AddCors(
@@ -32,8 +32,7 @@ builder.Services.AddCors(
            );
     
     });
-=======
->>>>>>> 7d40757bdd8140257ccc6777545a0d68c8f3c439
+
 
 var app = builder.Build();
 
