@@ -9,7 +9,7 @@ namespace SENAI_Notes.Interfaces
         Task<List<Tag>> GetAllAsync();
         Task<Tag> GetByIdAsync(int id);
         Task AddAsync(Tag tag);
-        Task UpdateAsync(Tag tag);
+        Task UpdateAsync(int id, Tag tag);
         Task DeleteAsync(int id);
     }
 }

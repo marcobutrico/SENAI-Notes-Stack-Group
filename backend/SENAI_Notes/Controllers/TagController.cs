@@ -47,7 +47,7 @@ namespace SENAI_Notes.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTag(int id, Tag tag)
+        public async Task<IActionResult>UpdateTag(int id, Tag tag)
         {
             if (id != tag.IdTag)
             {
@@ -60,9 +60,11 @@ namespace SENAI_Notes.Controllers
                 return NotFound();
             }
 
-            await _tagRepository.UpdateAsync(tag);
+            await _tagRepository.UpdateAsync(id, tag);
             return NoContent();
         }
+
+
 
         // DELETE: api/Tag/5
         [HttpDelete("{id}")]

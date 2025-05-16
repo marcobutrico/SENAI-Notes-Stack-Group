@@ -32,10 +32,6 @@ builder.Services.AddCors(
            );
     
     });
-<<<<<<< HEAD
-=======
-
->>>>>>> fbc09ae76c37b13c89bf9e49bd44ef9cf85169c1
 
 var app = builder.Build();
 

@@ -23,10 +23,23 @@ namespace SENAI_Notes.Repositories
         }
 
 
-        public async Task UpdateAsync(Tag tag)
+        public async Task UpdateAsync(int id, Tag tag)
         {
-            _context.Tags.Update(tag);
-            await _context.SaveChangesAsync();
+            //var passwordService = new PasswordService();
+            var foundTag = _context.Tags.Find(id);
+
+            if (foundTag == null)
+            {
+                throw new ArgumentNullException("Tag not found!");
+            }
+
+            // Atualize as propriedades do cliente com o DTO
+            foundTag.Name = tag.Name;
+
+            //clienteEncontrado.Senha = passwordService.HashPassword(clienteEncontrado);
+
+            _context.SaveChanges();
+
         }
 
         public async Task DeleteAsync(int id)
