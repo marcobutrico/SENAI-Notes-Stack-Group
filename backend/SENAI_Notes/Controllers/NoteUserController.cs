@@ -70,7 +70,7 @@ namespace SENAI_Notes.Controllers
         {
             try
             {
-                await _userRepository.UpdateUserAsync(id, user);
+                await _userRepository.UpdateUserAsync(user, id);
                 return Ok(user);
 
             }

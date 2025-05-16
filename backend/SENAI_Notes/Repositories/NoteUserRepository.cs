@@ -72,7 +72,7 @@ namespace SENAI_Notes.Repositories
 
             if (userFound == null)
             {
-                throw new ArgumentNullException("Usuario não encontrado!");
+                throw new ArgumentNullException("User not found!");
             }
 
             userFound.Name = usuario.Name;
@@ -113,6 +113,9 @@ namespace SENAI_Notes.Repositories
 
         }
 
-
+        public Task UpdateUserAsync(NotesUser usuario, int idUser)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
