@@ -1,33 +1,14 @@
-﻿using SENAI_Notes.Interfaces;
-using SENAI_Notes.Models;
+﻿using SENAI_Notes.Models;
 
-namespace SENAI_Notes.Repositories
+namespace SENAI_Notes.Interfaces
 {
-    public class NoteTagRepository : INoteTagRepository
+    public interface INoteRepository
     {
-        public Task AddNotetagAsync(Notetag noteTag)
-        {
-            throw new NotImplementedException();
-        }
+        Task<List<Note>> GetAllAsync(int IdUser);
+        Task<Note> GetByIdAsync(int idNote);
+        Task AddAsync(Note note);
+        Task UpdateAsync(Note note);
+        Task DeleteAsync(int id);
 
-        public Task<Notetag> GetAllNoteTagsAsync()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<Notetag> GetNoteTagByIdAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task RemoveNoteTagAsync(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task SaveAsync()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

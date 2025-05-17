@@ -16,12 +16,17 @@ namespace SENAI_Notes.Controllers
             _userRepository = userRepository;
         }
 
+
+
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
             var users = await _userRepository.GetAllUsers();
             return Ok(users);
         }
+
+
+
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserById(int id)
@@ -33,6 +38,8 @@ namespace SENAI_Notes.Controllers
             }
             return Ok(user);
         }
+
+
 
         [HttpPost]
         public async Task<IActionResult> CreateUser(NotesUser user)
@@ -70,15 +77,14 @@ namespace SENAI_Notes.Controllers
         {
             try
             {
-                await _userRepository.UpdateUserAsync(user, id);
+                await _userRepository.UpdateUserAsync(id, user);
                 return Ok(user);
 
             }
             // Caso dê erro
             catch (Exception ex)
             {
-
-                return NotFound(ex);
+                return NotFound(new { message = ex.Message });
             }
         }
 
