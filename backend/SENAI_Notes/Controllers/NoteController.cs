@@ -6,56 +6,117 @@ using SENAI_Notes.Models;
 namespace SENAI_Notes.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/notes")]
     public class NoteController : ControllerBase
     {
-        private readonly INoteRepository _notaRepo;
+        private readonly INoteRepository _noteRepo;
 
-            public NoteController(INoteRepository notaRepo)
+        public NoteController(INoteRepository noteRepo)
+        {
+            _noteRepo = noteRepo ?? throw new ArgumentNullException(nameof(noteRepo));
+        }
+
+        [HttpGet("users/{userId}")]
+        public async Task<ActionResult<IEnumerable<Note>>> GetNotesByUserId(int userId)
+        {
+            try
             {
-                _notaRepo = notaRepo;
+                var notes = await _noteRepo.GetAllAsync(userId);
+                return Ok(notes);
             }
-
-            [HttpGet("{idUser}")] 
-            public async Task<IActionResult> GetNotas(int idUser) 
+            catch (Exception ex)
             {
-                var notas = await _notaRepo.GetAllAsync(idUser);
-                return Ok(notas);
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Erro ao obter notas: {ex.Message}");
             }
+        }
 
-            [HttpGet("nota/{id}")]
-            public async Task<IActionResult> GetNota(int id)
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Note>> GetNoteById(int id)
+        {
+            try
             {
-                var nota = await _notaRepo.GetByIdAsync(id);
-                if (nota == null)
+                var note = await _noteRepo.GetByIdAsync(id);
+                if (note == null)
                 {
                     return NotFound();
                 }
-                return Ok(nota);
+                return Ok(note);
             }
-
-            [HttpPost]
-            public async Task<IActionResult> CreateNota([FromBody] Note nota)
+            catch (Exception ex)
             {
-                await _notaRepo.AddAsync(nota);
-                return CreatedAtAction(nameof(GetNota), new { id = nota.IdNote }, nota); 
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Erro ao obter nota: {ex.Message}");
             }
+        }
 
-            [HttpPut]
-            public async Task<IActionResult> UpdateNota([FromBody] Note nota)
+        [HttpPost]
+        public async Task<ActionResult<Note>> CreateNote([FromBody] Note note)
+        {
+            try
             {
-                await _notaRepo.UpdateAsync(nota);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                await _noteRepo.AddAsync(note);
+                return CreatedAtAction(nameof(GetNoteById), new { id = note.IdNote }, note);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Erro ao criar nota: {ex.Message}");
+            }
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateNote(int id, [FromBody] Note note)
+        {
+            try
+            {
+                if (id != note.IdNote)
+                {
+                    return BadRequest("O ID da nota na rota deve corresponder ao ID no corpo da requisição.");
+                }
+
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+
+                if (!await _noteRepo.NoteExistsAsync(id))
+                {
+                    return NotFound();
+                }
+
+                await _noteRepo.UpdateAsync(note);
                 return NoContent();
             }
-
-            [HttpDelete("{id}")]
-            public async Task<IActionResult> DeleteNota(int id)
+            catch (KeyNotFoundException)
             {
-                await _notaRepo.DeleteAsync(id);
-                return NoContent(); 
+                return NotFound();
             }
-
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Erro ao atualizar nota: {ex.Message}");
+            }
         }
-}
 
-      
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteNote(int id)
+        {
+            try
+            {
+                if (!await _noteRepo.NoteExistsAsync(id))
+                {
+                    return NotFound();
+                }
+
+                await _noteRepo.DeleteAsync(id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"Erro ao excluir nota: {ex.Message}");
+            }
+        }
+    }
+}
