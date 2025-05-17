@@ -1,61 +1,143 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using SENAI_Notes.Interfaces;
+﻿using Microsoft.AspNetCore.Mvc;
 using SENAI_Notes.Models;
+using SENAI_Notes.Interfaces;
+
 
 namespace SENAI_Notes.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
+    [ApiController]
     public class NoteController : ControllerBase
     {
-        private readonly INoteRepository _notaRepo;
+        private readonly INoteRepository _noteRepository;
 
-            public NoteController(INoteRepository notaRepo)
+        public NoteController(INoteRepository noteRepository)
+        {
+            _noteRepository = noteRepository;
+        }
+
+        // GET: api/Note/User/5
+        [HttpGet("User/{idUser}")]
+        public async Task<ActionResult<IEnumerable<Note>>> GetNotesByUser(int idUser)
+        {
+            try
             {
-                _notaRepo = notaRepo;
+                var notes = await _noteRepository.GetAllAsync(idUser);
+                return Ok(notes);
             }
-
-            [HttpGet("{idUser}")] 
-            public async Task<IActionResult> GetNotas(int idUser) 
+            catch (Exception ex)
             {
-                var notas = await _notaRepo.GetAllAsync(idUser);
-                return Ok(notas);
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
+        }
 
-            [HttpGet("nota/{id}")]
-            public async Task<IActionResult> GetNota(int id)
+        // GET: api/Note/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Note>> GetNote(int id)
+        {
+            try
             {
-                var nota = await _notaRepo.GetByIdAsync(id);
-                if (nota == null)
+                var note = await _noteRepository.GetByIdAsync(id);
+
+                if (note == null)
                 {
                     return NotFound();
                 }
-                return Ok(nota);
-            }
 
-            [HttpPost]
-            public async Task<IActionResult> CreateNota([FromBody] Note nota)
-            {
-                await _notaRepo.AddAsync(nota);
-                return CreatedAtAction(nameof(GetNota), new { id = nota.IdNote }, nota); 
+                return Ok(note);
             }
-
-            [HttpPut]
-            public async Task<IActionResult> UpdateNota([FromBody] Note nota)
+            catch (Exception ex)
             {
-                await _notaRepo.UpdateAsync(nota);
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        // POST: api/Note
+        [HttpPost]
+        public async Task<ActionResult<Note>> CreateNote(Note note)
+        {
+            try
+            {
+                if (note == null)
+                {
+                    return BadRequest("Note object is null");
+                }
+
+                // Set CreatedAt and UpdatedAt
+                note.CreatedAt = DateTime.UtcNow;
+                note.UpdatedAt = DateTime.UtcNow;
+
+
+                await _noteRepository.AddAsync(note);
+
+                return CreatedAtAction(nameof(GetNote), new { id = note.IdNote }, note);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        // PUT: api/Note/5
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateNote(int id, Note note)
+        {
+            try
+            {
+                if (note == null)
+                {
+                    return BadRequest("Note object is null");
+                }
+
+                if (id != note.IdNote)
+                {
+                    return BadRequest("Id in the request body does not match the route id");
+                }
+
+                var existingNote = await _noteRepository.GetByIdAsync(id);
+                if (existingNote == null)
+                {
+                    return NotFound();
+                }
+
+                // Update properties
+                existingNote.Title = note.Title;
+                existingNote.Content = note.Content;
+                existingNote.ImageUrl = note.ImageUrl;
+                existingNote.IsFavorite = note.IsFavorite;
+                existingNote.IsArchived = note.IsArchived;
+                existingNote.UpdatedAt = DateTime.UtcNow; // Update UpdatedAt
+
+                await _noteRepository.UpdateAsync(existingNote);
+
                 return NoContent();
             }
-
-            [HttpDelete("{id}")]
-            public async Task<IActionResult> DeleteNota(int id)
+            catch (Exception ex)
             {
-                await _notaRepo.DeleteAsync(id);
-                return NoContent(); 
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
-
         }
-}
 
-      
+        // DELETE: api/Note/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteNote(int id)
+        {
+            try
+            {
+                var note = await _noteRepository.GetByIdAsync(id);
+                if (note == null)
+                {
+                    return NotFound();
+                }
+
+                await _noteRepository.DeleteAsync(id);
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+    }
+}
