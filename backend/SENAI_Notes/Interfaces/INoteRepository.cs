@@ -6,13 +6,10 @@ namespace SENAI_Notes.Interfaces
     {
 
         Task<List<Note>> GetAllAsync(int IdUser);
-        Task<Note?> GetByIdAsync(int idNote);
+        Task<Note?> GetByIdAsync(int idNote); // Alterar para Note?
         Task AddAsync(Note note);
         Task UpdateAsync(Note note);
         Task DeleteAsync(int id);
-        Task<bool> NoteExistsAsync(int id);
-        Task<bool> NoteExistsAsync(int id);
-        Task<bool> NoteExistsAsync(int id);
         Task<bool> NoteExistsAsync(int id);
     }
 }
