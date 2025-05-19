@@ -16,39 +16,23 @@ namespace SENAI_Notes.Repositories
 
         public async Task<List<Note>> GetAllAsync(int IdUser)
         {
-            return await _context.Notes
-                .Where(n => n.IdUser == IdUser)
-                .ToListAsync();
+            return await _context.Notes.Where(n => n.IdUser == IdUser).ToListAsync();
         }
 
-        public async Task<Note?> GetByIdAsync(int idNote)
+        public async Task<Note> GetByIdAsync(int idNote)
         {
             return await _context.Notes.FindAsync(idNote);
         }
 
         public async Task AddAsync(Note note)
         {
-            note.CreatedAt = DateTime.UtcNow;
             _context.Notes.Add(note);
             await _context.SaveChangesAsync();
         }
 
         public async Task UpdateAsync(Note note)
         {
-            var existingNote = await _context.Notes.FindAsync(note.IdNote);
-            if (existingNote == null)
-            {
-                throw new KeyNotFoundException($"Nota com ID {note.IdNote} não encontrada.");
-            }
-
-            existingNote.Title = note.Title;
-            existingNote.Content = note.Content;
-            existingNote.ImageUrl = note.ImageUrl;
-            existingNote.IsFavorite = note.IsFavorite;
-            existingNote.IsArchived = note.IsArchived;
-            existingNote.UpdatedAt = DateTime.UtcNow;
-
-            _context.Notes.Update(existingNote);
+            _context.Notes.Update(note);
             await _context.SaveChangesAsync();
         }
 
@@ -60,13 +44,10 @@ namespace SENAI_Notes.Repositories
                 _context.Notes.Remove(note);
                 await _context.SaveChangesAsync();
             }
-        }
-
-        public async Task<bool> NoteExistsAsync(int id)
-        {
-            return await _context.Notes.AnyAsync(n => n.IdNote == id);
+            await _context.SaveChangesAsync();
         }
     }
 }
 
 
+       

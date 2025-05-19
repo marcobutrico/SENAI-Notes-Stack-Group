@@ -30,7 +30,7 @@ namespace SENAI_Notes.Repositories
 
             if (foundTag == null)
             {
-                throw new KeyNotFoundException($"Tag having ID {id} not found.");
+                throw new ArgumentNullException("Tag not found!");
             }
 
             // Atualize as propriedades do cliente com o DTO

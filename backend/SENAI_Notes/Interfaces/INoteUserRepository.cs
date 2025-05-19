@@ -9,7 +9,7 @@ namespace SENAI_Notes.Interfaces
         Task<NotesUser> CreateUserAsync(NotesUser user);
         Task DeleteUserAsync(int idUser);
 
-        Task UpdateUserAsync(int idUser, NotesUser usuario);
+        Task UpdateUserAsync(NotesUser usuario, int idUser);
 
         //Task<NotesUser> GetByEmailnPasswordAsync(string Email, string Password);
         //Task GetByName(string Nome);

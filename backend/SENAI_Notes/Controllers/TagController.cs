@@ -16,8 +16,6 @@ namespace SENAI_Notes.Controllers
             _tagRepository = tagRepository;
         }
 
-
-        /// <returns></returns>
         // GET: api/Tag
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Tag>>> GetTags()
@@ -26,9 +24,6 @@ namespace SENAI_Notes.Controllers
             return Ok(tags);
         }
 
-        /// <summary>
-        /// Implementa a busca de Tag por id
-        /// </summary>
         // GET: api/Tag/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Tag>> GetTag(int id)
@@ -60,9 +55,6 @@ namespace SENAI_Notes.Controllers
             }
 
             var existingTag = await _tagRepository.GetByIdAsync(id);
-
-            
-
             if (existingTag == null)
             {
                 return NotFound();
