@@ -5,35 +5,30 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SENAI_Notes.Repositories
 {
-    internal class NoteTagRepository : INoteTagRepository
+    public class NoteTagRepository : INoteTagRepository
     {
-        public async Task<IEnumerable<Notetag>> GetAllNoteTagsAsync()
+        public Task AddNotetagAsync(Notetag noteTag)
         {
-            // Implementation here
             throw new NotImplementedException();
         }
 
-        public async Task<Notetag?> GetNoteTagByIdAsync(int id)
+        public Task<IEnumerable<Notetag>> GetAllNoteTagsAsync()
         {
-            // Implementation here
             throw new NotImplementedException();
         }
 
-        public async Task AddNotetagAsync(Notetag noteTag)
+        public Task<Notetag?> GetNoteTagByIdAsync(int id)
         {
-            // Implementation here
             throw new NotImplementedException();
         }
 
-        public async Task RemoveNoteTagAsync(int id)
+        public Task RemoveNoteTagAsync(int id)
         {
-            // Implementation here
             throw new NotImplementedException();
         }
 
-        public async Task SaveAsync()
+        public Task SaveAsync()
         {
-            // Implementation here
             throw new NotImplementedException();
         }
     }

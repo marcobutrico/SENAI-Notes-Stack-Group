@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\ApplicationDbContext.cs" />
+    <Compile Remove="Interfaces\AppDbContext.cs" />
+    <Compile Remove="Repositories\SENAI_NotesContext.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Include="Services\PasswordServices.cs" />
   </ItemGroup>
 

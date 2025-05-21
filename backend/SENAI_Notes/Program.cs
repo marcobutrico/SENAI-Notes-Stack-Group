@@ -25,7 +25,7 @@ builder.Services.AddScoped<INoteTagRepository, NoteTagRepository>();
 builder.Services.AddScoped<INoteUserRepository, NoteUserRepository>();
 builder.Services.AddScoped<ITagRepository, TagRepository>();
 
-builder.Services.AddScoped<PasswordService, PasswordService>();
+// builder.Services.AddScoped<PasswordService, PasswordService>();
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer("Bearer", options =>
     {
