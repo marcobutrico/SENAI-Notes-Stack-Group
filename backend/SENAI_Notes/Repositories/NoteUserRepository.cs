@@ -81,20 +81,20 @@ namespace SENAI_Notes.Repositories
             userFound.UserThemePreferences = usuario.UserThemePreferences;
             userFound.UserFontPreferences = usuario.UserFontPreferences;
 
-           // clienteEncontrado.Senha = passwordService.HashPassword(clienteEncontrado);
+            // clienteEncontrado.Senha = passwordService.HashPassword(clienteEncontrado);
 
             await _context.SaveChangesAsync();
 
-      }
+        }
 
 
 
 
 
-            //public Task UpdateUserAsync(NotesUser usuario, int idUser)
-            //{
-            //    throw new NotImplementedException();
-            //}
+        //public Task UpdateUserAsync(NotesUser usuario, int idUser)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
 
         public NotesUser? BuscarPorEmailSenha(string email, string senha)
@@ -117,5 +117,12 @@ namespace SENAI_Notes.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public NotesUser GetByEmail(string email)
+        {
+            return _context.NotesUsers.FirstOrDefault(u => u.Email == email);
+        }
+
+
     }
 }

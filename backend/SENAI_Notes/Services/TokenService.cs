@@ -1,39 +1,33 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using SENAI_Notes.Models;
 
-//namespace SENAI_Notes.Services
-//{
-//    public class TokenService
-//    {
-//        public string GenerateToken(string email)
-//        {
-//            // Claims - informacoes do usuário que quero guardar
-//            // Definição das informações (claims) que serão armazenadas no token
-//            var claims = new[]
-//            {
-//            new Claim(ClaimTypes.Email, email)
-//        };
+namespace SENAI_Notes.Services
+{
+    public static class TokenService
+    {
+        public static string GenerateToken(NotesUser user)
+        {
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes("nossa-chave-secreta-mega-master-ultra-segura-senai");
 
-//            // Criação da chave secreta utilizada para assinar o token
-//            var chave = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("nossa-chave-secreta-mega-master-ultra-segura-senai"));
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[]
+                {
+            new Claim(ClaimTypes.NameIdentifier, user.IdUser.ToString()), // Changed from "Id" to "IdUser"
+            new Claim(ClaimTypes.Email, user.Email)
+        }),
+                Expires = DateTime.UtcNow.AddHours(2),
+                SigningCredentials = new SigningCredentials(
+                    new SymmetricSecurityKey(key),
+                    SecurityAlgorithms.HmacSha256Signature)
+            };
 
-
-//            // Definição das credenciais de assinatura usando o algoritmo HmacSha256 (keyed-hash message authentication code)
-//            var creds = new SigningCredentials(chave, SecurityAlgorithms.HmacSha256);
-
-//            // Criação do token JWT com emissor, audiência, claims e tempo de expiração
-//            var token = new JwtSecurityToken(
-//                issuer: "Ecommerce",
-//                audience: "Ecommerce",
-//                claims: claims,
-//                expires: DateTime.Now.AddMinutes(30),  //timeout de token - 30 min
-//                signingCredentials: creds
-//            );
-
-//            // Retorna o token em formato string
-//            return new JwtSecurityTokenHandler().WriteToken(token);
-//        }
-//    }
-//}
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
+    }
+}

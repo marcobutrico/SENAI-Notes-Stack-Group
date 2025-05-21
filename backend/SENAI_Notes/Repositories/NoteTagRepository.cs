@@ -1,43 +1,40 @@
-﻿using SENAI_Notes.Interfaces;
+using SENAI_Notes.Context;
+using SENAI_Notes.Interfaces;
 using SENAI_Notes.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace SENAI_Notes.Repositories
 {
-    public class NoteTagRepository : INoteTagRepository
+    internal class NoteTagRepository : INoteTagRepository
     {
-        private readonly SENAI_NotesContext _context;
-        public NoteTagRepository(SENAI_NotesContext context) 
+        public async Task<IEnumerable<Notetag>> GetAllNoteTagsAsync()
         {
-            _context = context;
+            // Implementation here
+            throw new NotImplementedException();
+        }
+
+        public async Task<Notetag?> GetNoteTagByIdAsync(int id)
+        {
+            // Implementation here
+            throw new NotImplementedException();
         }
 
         public async Task AddNotetagAsync(Notetag noteTag)
         {
-            await _context.Notetag.AddAsync(noteTag);
-        }
-
-        public async Task<Notetag> GetAllNoteTagsAsync() 
-        {
-            return await _context.Notetag.ToListAsync();
-        }
-
-        public async Task<Notetag> GetNoteTagByIdAsync(int id)
-        {
-            return await _context.Notetag.FirstOrDefaultAsync(nt => nt.IdNoteTag == id);
+            // Implementation here
+            throw new NotImplementedException();
         }
 
         public async Task RemoveNoteTagAsync(int id)
         {
-            var noteTag = await _context.Notetag.FirstOrDefaultAsync(nt => nt.IdNoteTag == id);
-            if (noteTag != null)
-            {
-                _context.Notetag.Remove(noteTag);
-            }
+            // Implementation here
+            throw new NotImplementedException();
         }
 
         public async Task SaveAsync()
         {
-            await _context.SaveChangesAsync();
+            // Implementation here
+            throw new NotImplementedException();
         }
     }
 }

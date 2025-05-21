@@ -11,7 +11,6 @@ namespace SENAI_Notes.Interfaces
 
         Task UpdateUserAsync(NotesUser usuario, int idUser);
 
-        //Task<NotesUser> GetByEmailnPasswordAsync(string Email, string Password);
-        //Task GetByName(string Nome);
+        NotesUser GetByEmail(string email);
     }
 }

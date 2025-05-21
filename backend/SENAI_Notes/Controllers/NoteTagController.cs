@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SENAI_Notes.Interfaces;
 using SENAI_Notes.Models;
+using SENAI_Notes.Repositories;
 
 namespace SENAI_Notes.Controllers
 {
@@ -9,65 +10,58 @@ namespace SENAI_Notes.Controllers
     [ApiController]
     public class NoteTagController : ControllerBase
     {
+        private readonly INoteTagRepository _noteTagRepository;
 
-        [Route("api/[controller]")]
-        [ApiController]
-        public class NoteTagController : ControllerBase
+        public NoteTagController(INoteTagRepository noteTagRepository)
         {
-            private readonly INoteTagRepository _noteTagRepository;
+            _noteTagRepository = noteTagRepository;
+        }
+        // GET: api/NoteTag
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Notetag>>> GetNoteTags()
+        {
+            var noteTags = await _noteTagRepository.GetAllNoteTagsAsync();
+            return Ok(noteTags);
+        }
 
-            public NoteTagController(INoteTagRepository noteTagRepository)
+        // GET: api/NoteTag/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Notetag>> GetNoteTag(int id)
+        {
+            var noteTag = await _noteTagRepository.GetNoteTagByIdAsync(id);
+
+            if (noteTag == null)
             {
-                _noteTagRepository = noteTagRepository;
+                return NotFound();
             }
 
-            // GET: api/NoteTag
-            [HttpGet]
-            public async Task<ActionResult<IEnumerable<Notetag>>> GetNoteTags()
+            return Ok(noteTag);
+        }
+
+        // POST: api/NoteTag
+        [HttpPost]
+        public async Task<ActionResult<Notetag>> PostNoteTag(Notetag noteTag)
+        {
+            await _noteTagRepository.AddNotetagAsync(noteTag);
+            await _noteTagRepository.SaveAsync();
+
+            return CreatedAtAction("GetNoteTag", new { id = noteTag.IdNoteTag }, noteTag);
+        }
+
+        // DELETE: api/NoteTag/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteNoteTag(int id)
+        {
+            var noteTag = await _noteTagRepository.GetNoteTagByIdAsync(id);
+            if (noteTag == null)
             {
-                var noteTags = await _noteTagRepository.GetAllNoteTagsAsync();
-                return Ok(noteTags);
+                return NotFound();
             }
 
-            // GET: api/NoteTag/5
-            [HttpGet("{id}")]
-            public async Task<ActionResult<Notetag>> GetNoteTag(int id)
-            {
-                var noteTag = await _noteTagRepository.GetNoteTagByIdAsync(id);
+            await _noteTagRepository.RemoveNoteTagAsync(id);
+            await _noteTagRepository.SaveAsync();
 
-                if (noteTag == null)
-                {
-                    return NotFound();
-                }
-
-                return Ok(noteTag);
-            }
-
-            // POST: api/NoteTag
-            [HttpPost]
-            public async Task<ActionResult<Notetag>> PostNoteTag(Notetag noteTag)
-            {
-                await _noteTagRepository.AddNotetagAsync(noteTag);
-                await _noteTagRepository.SaveAsync();
-
-                return CreatedAtAction("GetNoteTag", new { id = noteTag.IdNoteTag }, noteTag);
-            }
-
-            // DELETE: api/NoteTag/5
-            [HttpDelete("{id}")]
-            public async Task<IActionResult> DeleteNoteTag(int id)
-            {
-                var noteTag = await _noteTagRepository.GetNoteTagByIdAsync(id);
-                if (noteTag == null)
-                {
-                    return NotFound();
-                }
-
-                await _noteTagRepository.RemoveNoteTagAsync(id);
-                await _noteTagRepository.SaveAsync();
-
-                return NoContent();
-            }
+            return NoContent();
         }
     }
 }

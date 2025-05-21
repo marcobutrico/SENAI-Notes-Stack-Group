@@ -1,27 +1,52 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using SENAI_Notes.Interfaces;
+﻿using Microsoft.AspNetCore.Mvc;
 using SENAI_Notes.Models;
+using SENAI_Notes.Services;
+using SENAI_Notes.Repositories;
+using SENAI_Notes.Interfaces;
+using SENAI_Notes.DTO;
 
 namespace SENAI_Notes.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class NotesUserController : ControllerBase
+
+    public class AuthController : ControllerBase
     {
         private readonly INoteUserRepository _userRepository;
+        private readonly PasswordService _passwordService;
 
-        public NotesUserController(INoteUserRepository userRepository)
+        public AuthController(INoteUserRepository userRepository)
         {
             _userRepository = userRepository;
+            _passwordService = new PasswordService();
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllUsers()
+        //----------------------------------------------
+
+        [HttpPost("login")]
+        public IActionResult Login([FromBody] LoginRequestDto loginDto)
         {
-            var users = await _userRepository.GetAllUsers();
-            return Ok(users);
+            var user = _userRepository.GetByEmail(loginDto.Email);
+            if (user == null)
+                return Unauthorized("Usuário ou senha inválidos.");
+
+            if (!_passwordService.VerifyPassword(user, loginDto.Password))
+                return Unauthorized("Usuário ou senha inválidos.");
+
+            var tokenService = new TokenServiceBase();
+            var token = tokenService.GenerateToken(user.Email);
+
+            var response = new LoginResponseDto
+            {
+                Token = token,
+                Id = user.IdUser,
+                Email = user.Email
+            };
+
+            return Ok(response);
         }
+
+        //---------------------
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserById(int id)
@@ -46,7 +71,6 @@ namespace SENAI_Notes.Controllers
             return CreatedAtAction(nameof(GetUserById), new { id = user.IdUser }, user);
         }
 
-        // Deleta Produto por ID
         [HttpDelete("{idUser}")]
         public async Task<IActionResult> Deletar(int idUser)
         {
@@ -56,15 +80,12 @@ namespace SENAI_Notes.Controllers
 
                 return NoContent();
             }
-            // Caso dê erro
             catch (Exception ex)
             {
-
                 return NotFound("Usuario não encontrado!");
             }
         }
 
-        // Edita Produto por ID
         [HttpPut("{id}")]
         public async Task<IActionResult> Editar(int id, NotesUser user)
         {
@@ -72,16 +93,11 @@ namespace SENAI_Notes.Controllers
             {
                 await _userRepository.UpdateUserAsync(user, id);
                 return Ok(user);
-
             }
-            // Caso dê erro
             catch (Exception ex)
             {
-
                 return NotFound(ex);
             }
         }
-
-
     }
 }
