@@ -5,29 +5,39 @@ namespace SENAI_Notes.Repositories
 {
     public class NoteTagRepository : INoteTagRepository
     {
-        public Task AddNotetagAsync(Notetag noteTag)
+        private readonly SENAI_NotesContext _context;
+        public NoteTagRepository(SENAI_NotesContext context) 
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public Task<Notetag> GetAllNoteTagsAsync()
+        public async Task AddNotetagAsync(Notetag noteTag)
         {
-            throw new NotImplementedException();
+            await _context.Notetag.AddAsync(noteTag);
         }
 
-        public Task<Notetag> GetNoteTagByIdAsync(int id)
+        public async Task<Notetag> GetAllNoteTagsAsync() 
         {
-            throw new NotImplementedException();
+            return await _context.Notetag.ToListAsync();
         }
 
-        public Task RemoveNoteTagAsync(int id)
+        public async Task<Notetag> GetNoteTagByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Notetag.FirstOrDefaultAsync(nt => nt.IdNoteTag == id);
         }
 
-        public Task SaveAsync()
+        public async Task RemoveNoteTagAsync(int id)
         {
-            throw new NotImplementedException();
+            var noteTag = await _context.Notetag.FirstOrDefaultAsync(nt => nt.IdNoteTag == id);
+            if (noteTag != null)
+            {
+                _context.Notetag.Remove(noteTag);
+            }
+        }
+
+        public async Task SaveAsync()
+        {
+            await _context.SaveChangesAsync();
         }
     }
 }

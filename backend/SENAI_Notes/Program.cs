@@ -5,7 +5,15 @@ using SENAI_Notes.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 
 // Avisa que a aplicacao usa controllers
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+                 .AddNewtonsoftJson(options =>
+                 {
+                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                 });
+    
+    
+    
+   
 
 // Adiciono o Gerador de Swagger
 builder.Services.AddSwaggerGen();
@@ -15,8 +23,6 @@ builder.Services.AddScoped<INoteRepository, NoteRepository>();
 builder.Services.AddScoped<INoteTagRepository, NoteTagRepository>();
 builder.Services.AddScoped<INoteUserRepository, NoteUserRepository>();
 builder.Services.AddScoped<ITagRepository, TagRepository>();
-
-
 
 builder.Services.AddCors(
     options =>
