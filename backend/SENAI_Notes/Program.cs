@@ -15,7 +15,11 @@ builder.Services.AddControllers()
                  });
 
 // Adiciono o Gerador de Swagger
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.EnableAnnotations();
+});
+
 
 builder.Services.AddDbContext<SenaiNotesContext>();
 builder.Services.AddScoped<INoteRepository, NoteRepository>();
