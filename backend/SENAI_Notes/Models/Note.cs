@@ -5,6 +5,8 @@ namespace SENAI_Notes.Models;
 
 public partial class Note
 {
+    public static IEnumerable<object> Tag { get; internal set; }
+    public static object Idusuario { get; internal set; }
     public int IdNote { get; set; }
 
     public string? Title { get; set; }
@@ -26,4 +28,7 @@ public partial class Note
     public virtual NotesUser? IdUserNavigation { get; set; }
 
     public virtual ICollection<Notetag> Notetags { get; set; } = new List<Notetag>();
+    public int TitleNote { get; internal set; }
+    public IEnumerable<object> TagNotes { get; internal set; }
+    public int ContentNote { get; internal set; }
 }

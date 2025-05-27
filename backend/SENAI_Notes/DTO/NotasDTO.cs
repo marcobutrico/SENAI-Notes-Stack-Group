@@ -8,6 +8,8 @@
         public DateTime CreationDate { get; set; }
         public DateTime? LastUpdateDate { get; set; }
         public int IdUser { get; set; }
+
+        public List<string> tags { get; set; }
     }
 
     public class NoteRequestDTO

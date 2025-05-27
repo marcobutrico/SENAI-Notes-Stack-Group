@@ -15,10 +15,13 @@ builder.Services.AddControllers()
                  });
 
 // Adiciono o Gerador de Swagger
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.EnableAnnotations();
+});
 
 builder.Services.AddDbContext<SenaiNotesContext>();
-builder.Services.AddScoped<INoteRepository, NoteRepository>();
+//builder.Services.AddScoped<INoteRepository, NoteRepository>();
 
 // Ensure that NoteTagRepository implements INoteTagRepository
 builder.Services.AddScoped<INoteTagRepository, NoteTagRepository>();
@@ -48,7 +51,7 @@ builder.Services.AddCors(
             name: "minhasOrigens",
             policy =>
             {
-                policy.WithOrigins("");
+                policy.WithOrigins("http://localhost:5173", "http://127.0.0.1:5173");
                 policy.AllowAnyHeader();
                 policy.AllowAnyMethod();
             }

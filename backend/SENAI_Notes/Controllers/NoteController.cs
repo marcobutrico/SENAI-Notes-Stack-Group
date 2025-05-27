@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SENAI_Notes.Interfaces;
 using SENAI_Notes.Models;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace SENAI_Notes.Controllers
 {
@@ -17,10 +18,20 @@ namespace SENAI_Notes.Controllers
             _notaRepo = notaRepo;
         }
 
+        //public Anotacao? ArquivarAnotacao (int id)
+        //{
+            //var anotacao =_notaRepo.Notes.Find(id);
+            //if (anotacao == null) { return null; 
+            ///Notes.NotesArquivada =!Notes.NotesArquivada;
+                //_notaRepo.SaveChanges();
+                //return anotacao;
+          //}
+
+
         [HttpGet("{idUser}")]
         public async Task<IActionResult> GetNotas(int idUser)
         {
-            var notas = await _notaRepo.GetAllAsync(idUser);
+            var notas = await _notaRepo.GetAllAsync(idUser, _notaRepo.GetTitleNote());
             return Ok(notas);
         }
 
@@ -36,6 +47,10 @@ namespace SENAI_Notes.Controllers
         }
 
         [HttpPost]
+        [SwaggerOperation(
+          Summary = "Arquiva uma Anotacao",
+            Description = "Este endpoint arquiva uma anotacao com base no ID fornecido"
+            )]
         public async Task<IActionResult> CreateNota([FromBody] Note nota)
         {
             await _notaRepo.AddAsync(nota);
