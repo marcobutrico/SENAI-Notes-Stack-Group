@@ -1,0 +1,66 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\marco\\OneDrive\\Documentos\\SENAI\\SENAI-Notes-Stack-Group\\backend\\SENAI_Notes\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{B1A07E13-B23B-4A76-A923-9EEFFBF1CF19}|SENAI_Notes.csproj|c:\\users\\marco\\onedrive\\documentos\\senai\\senai-notes-stack-group\\backend\\senai_notes\\controllers\\notecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B1A07E13-B23B-4A76-A923-9EEFFBF1CF19}|SENAI_Notes.csproj|solutionrelative:controllers\\notecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B1A07E13-B23B-4A76-A923-9EEFFBF1CF19}|SENAI_Notes.csproj|c:\\users\\marco\\onedrive\\documentos\\senai\\senai-notes-stack-group\\backend\\senai_notes\\repositories\\noterepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B1A07E13-B23B-4A76-A923-9EEFFBF1CF19}|SENAI_Notes.csproj|solutionrelative:repositories\\noterepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 1,
+      "VerticalTabListWidth": 100,
+      "DocumentGroups": [
+        {
+          "DockedHeight": 200,
+          "SelectedChildIndex": 4,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "NoteRepository.cs",
+              "DocumentMoniker": "C:\\Users\\marco\\OneDrive\\Documentos\\SENAI\\SENAI-Notes-Stack-Group\\backend\\SENAI_Notes\\Repositories\\NoteRepository.cs",
+              "RelativeDocumentMoniker": "Repositories\\NoteRepository.cs",
+              "ToolTip": "C:\\Users\\marco\\OneDrive\\Documentos\\SENAI\\SENAI-Notes-Stack-Group\\backend\\SENAI_Notes\\Repositories\\NoteRepository.cs",
+              "RelativeToolTip": "Repositories\\NoteRepository.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-27T22:33:01.776Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "NoteController.cs",
+              "DocumentMoniker": "C:\\Users\\marco\\OneDrive\\Documentos\\SENAI\\SENAI-Notes-Stack-Group\\backend\\SENAI_Notes\\Controllers\\NoteController.cs",
+              "RelativeDocumentMoniker": "Controllers\\NoteController.cs",
+              "ToolTip": "C:\\Users\\marco\\OneDrive\\Documentos\\SENAI\\SENAI-Notes-Stack-Group\\backend\\SENAI_Notes\\Controllers\\NoteController.cs",
+              "RelativeToolTip": "Controllers\\NoteController.cs",
+              "ViewState": "AgIAACQAAAAAAAAAAAAawC4AAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-05-27T22:32:25.504Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
