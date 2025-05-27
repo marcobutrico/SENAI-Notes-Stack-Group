@@ -16,6 +16,8 @@ public partial class SenaiNotesContext : DbContext
     {
     }
 
+    public virtual DbSet<AuditoriaGeral> AuditoriaGerals { get; set; }
+
     public virtual DbSet<Note> Notes { get; set; }
 
     public virtual DbSet<NotesUser> NotesUsers { get; set; }
@@ -26,13 +28,31 @@ public partial class SenaiNotesContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Data Source=DESKTOP-0L5VRFL\\SQLEXPRESS;Initial Catalog=SENAI_NOTES;User Id=sa;Password=Senai@134;TrustServerCertificate=true;");
+        => optionsBuilder.UseSqlServer("Server=tcp:senainotesdb.database.windows.net,1433;Initial Catalog=SENAI_NOTES;Persist Security Info=False;User ID=LoginSenaiNotes_Backend;Password=Senai@134;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<AuditoriaGeral>(entity =>
+        {
+            entity.HasKey(e => e.IdLog).HasName("PK__Auditori__0C54DBC6C44B7389");
+
+            entity.ToTable("AuditoriaGeral");
+
+            entity.Property(e => e.DataAcao).HasColumnType("datetime");
+            entity.Property(e => e.NomeTabela)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+            entity.Property(e => e.TipoAcao)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+            entity.Property(e => e.Usuario)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+        });
+
         modelBuilder.Entity<Note>(entity =>
         {
-            entity.HasKey(e => e.IdNote).HasName("PK__NOTE__4B2ACFF672AEEE8F");
+            entity.HasKey(e => e.IdNote).HasName("PK__NOTE__4B2ACFF64C62CD63");
 
             entity.ToTable("NOTE");
 
@@ -43,12 +63,13 @@ public partial class SenaiNotesContext : DbContext
 
             entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.Notes)
                 .HasForeignKey(d => d.IdUser)
-                .HasConstraintName("FK__NOTE__IdUser__398D8EEE");
+                .OnDelete(DeleteBehavior.SetNull)
+                .HasConstraintName("FK__NOTE__IdUser__2EDAF651");
         });
 
         modelBuilder.Entity<NotesUser>(entity =>
         {
-            entity.HasKey(e => e.IdUser).HasName("PK__NOTES_US__B7C926386C9C20D9");
+            entity.HasKey(e => e.IdUser).HasName("PK__NOTES_US__B7C9263897AE6D1F");
 
             entity.ToTable("NOTES_USER");
 
@@ -60,27 +81,32 @@ public partial class SenaiNotesContext : DbContext
 
         modelBuilder.Entity<Notetag>(entity =>
         {
-            entity.HasKey(e => e.IdNoteTag).HasName("PK__NOTETAG__B9937E197B961E91");
+            entity.HasKey(e => e.IdNoteTag).HasName("PK__NOTETAG__B9937E19B39BBCD1");
 
             entity.ToTable("NOTETAG");
 
             entity.HasOne(d => d.IdNoteNavigation).WithMany(p => p.Notetags)
                 .HasForeignKey(d => d.IdNote)
-                .HasConstraintName("FK__NOTETAG__IdNote__3E52440B");
+                .OnDelete(DeleteBehavior.SetNull)
+                .HasConstraintName("FK__NOTETAG__IdNote__3493CFA7");
 
             entity.HasOne(d => d.IdTagNavigation).WithMany(p => p.Notetags)
                 .HasForeignKey(d => d.IdTag)
-                .HasConstraintName("FK__NOTETAG__IdTag__3F466844");
+                .OnDelete(DeleteBehavior.SetNull)
+                .HasConstraintName("FK__NOTETAG__IdTag__3587F3E0");
         });
 
         modelBuilder.Entity<Tag>(entity =>
         {
-            entity.HasKey(e => e.IdTag).HasName("PK__TAG__2BC60B0BD158B64E");
+            entity.HasKey(e => e.IdTag).HasName("PK__TAG__2BC60B0B525BDF31");
 
             entity.ToTable("TAG");
 
             entity.Property(e => e.Name).IsUnicode(false);
 
+            entity.HasOne(d => d.IdUserNavigation).WithMany(p => p.Tags)
+                .HasForeignKey(d => d.IdUser)
+                .HasConstraintName("FK__TAG__IdUser__31B762FC");
         });
 
         OnModelCreatingPartial(modelBuilder);
